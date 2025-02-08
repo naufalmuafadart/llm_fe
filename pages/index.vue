@@ -6,7 +6,7 @@
   
 <script>
 import Chat from '~/components/Chat.vue';
-import '~/assets/index.css'
+import '~/assets/chat/index.css'
 
 export default {
     layout: 'chat',
@@ -17,5 +17,5 @@ export default {
 </script>
 
 <style>
-@import url("~/assets/index.css");
+@import url("~/assets/chat/index.css");
 </style>

@@ -6,11 +6,11 @@
   
 <script>
     export default {
-        name: 'ChatLayout',
+        name: 'LoginLayout',
     };
 </script>
   
-<style scoped>
+<style>
     html, body {
         margin: 0;
         padding: 0;
