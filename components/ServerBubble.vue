@@ -1,14 +1,14 @@
 <template>
     <div class="message">
         <div class="text">
-            {{ text }}
+            <Content :content="content" />
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    props: ['text'],
+    props: ['text', 'content'],
 }
 </script>
 

@@ -1,14 +1,16 @@
 <template>
 	<div class="chat-container">
 		<Navbar />
-		<ChatMessages :messages="messages" />
+		<ChatMessages :messages="messages" :is_disabled="isDisabled" />
 		<div class="chat-input">
 			<input
 				v-model="newMessage"
 				@keyup.enter="sendMessage"
+				:disabled="isDisabled"
 				placeholder="Ketik pesan..." />
 			<button
-				@click="sendMessage">Kirim</button>
+				@click="sendMessage"
+				:disabled="isDisabled">Kirim</button>
 		</div>
 	</div>
 </template>
@@ -17,19 +19,37 @@
 export default {
 	data() {
 		return {
-			messages: [
-				// { sender: 'Server', text: 'Hello!' },
-				// { sender: 'Client', text: 'Hi there!' },
-			],
+			messages: [],
 			newMessage: '',
+			isDisabled: false,
 		};
 	},
 	methods: {
-		sendMessage() {
+		async sendMessage() {
 			if (this.newMessage.trim() !== '') {
-				this.messages.push({ sender: 'Client', text: this.newMessage });
-				this.messages.push({ sender: 'Server', text: 'Jawaban' });
+				const config = useRuntimeConfig();
+				this.isDisabled = true;
+				this.messages.push({ sender: 'Client', text: this.newMessage, content: []});
+
+				const response = await fetch(config.public.BACK_END_URL, {
+					method: 'POST',
+					body: JSON.stringify({
+						'message': this.newMessage
+					}),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
+				const responseJSON = await response.json();
+				console.log({ responseJSON });
 				this.newMessage = '';
+
+				if (response.status == 200) {
+					this.messages.push({ sender: 'Server', text: '', content: responseJSON['content'] });
+				} else {
+					this.messages.push({ sender: 'Server', text: '', content: [{ "element": "text", "text": "Tidak dapat membuat rute" }] });
+				}
+				this.isDisabled = false;
 			}
 		},
 	},
