@@ -31,7 +31,7 @@ export default {
 				this.isDisabled = true;
 				this.messages.push({ sender: 'Client', text: this.newMessage, content: []});
 
-				const response = await fetch(config.public.BACK_END_URL, {
+				const response = await fetch(`${config.public.BACK_END_URL}/api/recommender`, {
 					method: 'POST',
 					body: JSON.stringify({
 						'message': this.newMessage
@@ -45,7 +45,7 @@ export default {
 				this.newMessage = '';
 
 				if (response.status == 200) {
-					this.messages.push({ sender: 'Server', text: '', content: responseJSON['content'] });
+					this.messages.push({ sender: 'Server', text: '', content: responseJSON['data'].content });
 				} else {
 					this.messages.push({ sender: 'Server', text: '', content: [{ "element": "text", "text": "Tidak dapat membuat rute" }] });
 				}
